@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour {
     main_camera.transform.LookAt(goal_transform);
     if (Vector3.Distance(main_camera.transform.position, newPosition) > 0.05f) {
       float fracComplete = (Time.time - startTime) / moveTime;
-      main_camera.transform.position = Vector3.Slerp(main_camera.transform.position, newPosition, fracComplete);
+      main_camera.transform.position = Vector3.Lerp(main_camera.transform.position, newPosition, fracComplete);
     } else if (needNewBall) {
       main_camera.transform.position = newPosition;
       CreateBall();

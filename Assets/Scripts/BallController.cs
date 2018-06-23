@@ -5,36 +5,37 @@ public class BallController : MonoBehaviour {
 
   public GameManager manager;
 
-  private float expectedMinPower = 6f, expectedMaxPower = 50f;
-  private float desiredMinPower = 14f, desiredMaxPower = 17f;
+  private float expectedMinPower = 1f, expectedMaxPower = 25f;
+  private float desiredMinPower = 200f, desiredMaxPower = 260f;
 
   private Vector3 startPos;
   private float startTime;
 
+  private Vector3 lastPosition, deltaPosition;
+  private bool held = false;
+
   void OnMouseDown() {
-    startTime = Time.time;
-    startPos = Input.mousePosition;
+    held = true;
+   }
+
+  void Update() {
+    if (held) {
+      Vector3 position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 2f));
+      transform.position = position;
+    }
+    deltaPosition = transform.position - lastPosition;
+    lastPosition = transform.position;
   }
 
   void OnMouseUp() {
-    Vector3 endPos = Input.mousePosition;
-    float endTime = Time.time;
+    held = false;
 
-    startPos.z = 0.1f;
-    endPos.z = 3.0f;
+    Vector3 direction = deltaPosition * 50f;
 
-    startPos = Camera.main.ScreenToWorldPoint(startPos);
-    endPos = Camera.main.ScreenToWorldPoint(endPos);
+    float power = direction.magnitude;
 
-    float duration = endTime - startTime;
-
-    Vector3 direction = endPos - startPos;
-
-    float distance = direction.magnitude;
-
-    direction.y = 4.5f;
-
-    float power = distance / duration;
+    direction.y *= 0.75f;
+    direction += Camera.main.transform.forward * (power * 0.75f);
 
     power -= expectedMinPower;
     power /= expectedMaxPower - expectedMinPower;
