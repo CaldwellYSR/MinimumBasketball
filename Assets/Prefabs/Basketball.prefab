@@ -113,6 +113,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 0}
+  expectedMinPower: 2
+  expectedMaxPower: 30
+  desiredMinPower: 12
+  desiredMaxPower: 19
 --- !u!135 &135437858549271184
 SphereCollider:
   m_ObjectHideFlags: 1
