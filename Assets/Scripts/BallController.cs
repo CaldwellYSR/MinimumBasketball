@@ -5,8 +5,8 @@ public class BallController : MonoBehaviour {
 
   public GameManager manager;
 
-  public float expectedMinPower = 4f, expectedMaxPower = 25f;
-  public float desiredMinPower = 14f, desiredMaxPower = 17f;
+  private float expectedMinPower = 6f, expectedMaxPower = 50f;
+  private float desiredMinPower = 14f, desiredMaxPower = 17f;
 
   private Vector3 startPos;
   private float startTime;
@@ -20,8 +20,8 @@ public class BallController : MonoBehaviour {
     Vector3 endPos = Input.mousePosition;
     float endTime = Time.time;
 
-    startPos += (Camera.main.transform.forward * 2f);
-    endPos += (Camera.main.transform.forward * 5f);
+    startPos.z = 0.1f;
+    endPos.z = 3.0f;
 
     startPos = Camera.main.ScreenToWorldPoint(startPos);
     endPos = Camera.main.ScreenToWorldPoint(endPos);
@@ -35,7 +35,6 @@ public class BallController : MonoBehaviour {
     direction.y = 4.5f;
 
     float power = distance / duration;
-    Debug.Log(power);
 
     power -= expectedMinPower;
     power /= expectedMaxPower - expectedMinPower;
@@ -44,6 +43,7 @@ public class BallController : MonoBehaviour {
 
     power *= desiredMaxPower - desiredMinPower;
     power += desiredMinPower;
+    Debug.Log(power);
 
     Vector3 velocity = (transform.rotation * direction).normalized * power;
 
@@ -57,7 +57,7 @@ public class BallController : MonoBehaviour {
       manager.Goal();
     } else if (collision.CompareTag("Ground")) {
       Destroy(gameObject);
-      manager.CreateBall();
+      manager.MoveToNewPosition();
     }
   }
 }
