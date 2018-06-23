@@ -3,23 +3,44 @@ using System.Collections;
 
 public class BallController : MonoBehaviour {
 
-  public GameObject goal;
+  public GameManager manager;
 
-  [Range(0, 25f)]
-  public float speed;
+  private Vector3 startPos;
+  private float startTime;
 
-  public ParticleSystem goal_burst;
+  void OnMouseDown() {
+    startTime = Time.time;
+    startPos = Input.mousePosition;
+  }
 
-  private Rigidbody body;
+  void OnMouseUp() {
+    Vector3 endPos = Input.mousePosition;
+    float endTime = Time.time;
 
-  void Awake() {
-    body = GetComponent<Rigidbody>();
-    goal_burst.emissionRate = 0f;
+    startPos += (Camera.main.transform.forward * 2);
+    endPos += (Camera.main.transform.forward * 6);
+
+
+    startPos = Camera.main.ScreenToWorldPoint(startPos);
+    endPos = Camera.main.ScreenToWorldPoint(endPos);
+
+    float duration = endTime - startTime;
+
+    Vector3 direction = endPos - startPos;
+
+    float distance = direction.magnitude;
+
+    float power = distance / duration;
+
+    Vector3 velocity = (transform.rotation * direction).normalized * power;
+
+    GetComponent<Rigidbody>().useGravity = true;
+    GetComponent<Rigidbody>().AddForce(velocity, ForceMode.Impulse);
   }
 
   void OnTriggerEnter(Collider collision) {
     if (collision.CompareTag("Goal")) {
-      goal_burst.Emit(50);
+      manager.Goal();
     }
   }
 }
