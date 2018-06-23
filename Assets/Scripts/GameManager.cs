@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour {
     needNewBall = false;
     Vector3 pos = main_camera.transform.position + (main_camera.transform.forward * distance) + offset;
     GameObject basketball = Instantiate(basketballPrefab, pos, Quaternion.identity);
+    basketball.transform.LookAt(goal_transform);
     BallController basketballController = basketball.GetComponent<BallController>();
     basketballController.manager = this;
   }

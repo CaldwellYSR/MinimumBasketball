@@ -13,6 +13,7 @@ public class BallController : MonoBehaviour {
 
   private Vector3 lastPosition, deltaPosition;
   private bool held = false;
+  private float torqueModifier = 3f;
 
   void OnMouseDown() {
     held = true;
@@ -46,10 +47,13 @@ public class BallController : MonoBehaviour {
     power += desiredMinPower;
     Debug.Log(power);
 
-    Vector3 velocity = (transform.rotation * direction).normalized * power;
+    Vector3 velocity = direction.normalized * power;
 
-    GetComponent<Rigidbody>().useGravity = true;
-    GetComponent<Rigidbody>().AddForce(velocity, ForceMode.Impulse);
+    Rigidbody body = GetComponent<Rigidbody>();
+
+    body.useGravity = true;
+    body.AddForce(velocity, ForceMode.Impulse);
+    body.AddTorque(transform.right * -power * torqueModifier);
   }
 
   void OnTriggerEnter(Collider collision) {

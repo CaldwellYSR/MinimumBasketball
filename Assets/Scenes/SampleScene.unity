@@ -474,11 +474,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   main_camera: {fileID: 282840813}
-  basketballPrefab: {fileID: 1074105005252674, guid: 43dea7fc6e36c4e53866dff699b5bb5e,
+  basketballPrefab: {fileID: 1277248461539418, guid: 43dea7fc6e36c4e53866dff699b5bb5e,
     type: 2}
   goal_transform: {fileID: 912143700}
-  offset: {x: 0, y: -0.75, z: 0}
-  distance: 2
 --- !u!4 &1129718271
 Transform:
   m_ObjectHideFlags: 0
