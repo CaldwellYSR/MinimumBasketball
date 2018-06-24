@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
   public Camera main_camera;
   public GameObject basketballPrefab;
   public Transform goal_transform;
+
+  public Slider difficultySlider;
+  public int difficultyModifier = 1;
 
   private Vector3 offset = new Vector3(0, -0.75f, 0);
   private bool needNewBall = true;
@@ -27,6 +31,10 @@ public class GameManager : MonoBehaviour {
       CreateBall();
     }
 
+  }
+
+  public void SetDifficulty() {
+    difficultyModifier = (int) Mathf.Floor(difficultySlider.value);
   }
 
   public void Goal() {

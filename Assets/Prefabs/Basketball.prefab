@@ -36,9 +36,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4650696604156130}
-  - component: {fileID: 114784686058215296}
   - component: {fileID: 54737945480410568}
   - component: {fileID: 135894872630571444}
+  - component: {fileID: 114784686058215296}
   m_Layer: 0
   m_Name: Basketball
   m_TagString: Basketball

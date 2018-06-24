@@ -15,6 +15,14 @@ public class BallController : MonoBehaviour {
   private bool held = false;
   private float torqueModifier = 3f;
 
+  private GameObject _target;
+  private float _gravity;
+
+  void Awake() {
+    _gravity = Mathf.Abs(Physics.gravity.y);
+    _target = GameObject.FindWithTag("Rim");
+  }
+
   void OnMouseDown() {
     held = true;
    }
@@ -45,9 +53,11 @@ public class BallController : MonoBehaviour {
 
     power *= desiredMaxPower - desiredMinPower;
     power += desiredMinPower;
-    Debug.Log(power);
 
-    Vector3 velocity = direction.normalized * power;
+    Vector3 desiredDirection = Vector3.Normalize(_target.transform.position - transform.position);
+    desiredDirection.y = GetAngle(power);
+
+    Vector3 velocity = Vector3.Lerp(direction, desiredDirection, 1 - manager.difficultyModifier * 0.01f).normalized * power;
 
     Rigidbody body = GetComponent<Rigidbody>();
 
@@ -64,5 +74,13 @@ public class BallController : MonoBehaviour {
       Destroy(gameObject);
       manager.MoveToNewPosition();
     }
+  }
+
+  private float GetAngle(float _force) {
+    float v2 = (_force * _force);
+    float x = _target.transform.position.x - transform.position.x;
+    float y = _target.transform.position.y - transform.position.y;
+
+    return Mathf.Abs(Mathf.Atan((v2 + Mathf.Sqrt(v2*v2 - _gravity * (_gravity * x * x + 2 * y * v2))) / _gravity * x));
   }
 }
