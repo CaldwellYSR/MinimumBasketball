@@ -7,6 +7,8 @@ public class BallController : MonoBehaviour {
 
   private float expectedMinPower = 1f, expectedMaxPower = 25f;
   private float desiredMinPower = 200f, desiredMaxPower = 260f;
+  private float perfectPower = 215f;
+  private bool scored = false, missed = false, hitRim = false;
 
   private Vector3 startPos;
   private float startTime;
@@ -57,7 +59,8 @@ public class BallController : MonoBehaviour {
     Vector3 desiredDirection = Vector3.Normalize(_target.transform.position - transform.position);
     desiredDirection.y = GetAngle(power);
 
-    Vector3 velocity = Vector3.Lerp(direction, desiredDirection, 1 - manager.difficultyModifier * 0.01f).normalized * power;
+    Vector3 velocity = Vector3.Lerp(direction, desiredDirection, 1 - manager.difficultyModifier * 0.01f).normalized;
+    velocity *= Mathf.Lerp(power, perfectPower, 1 - manager.difficultyModifier * 0.01f);
 
     Rigidbody body = GetComponent<Rigidbody>();
 
@@ -67,12 +70,21 @@ public class BallController : MonoBehaviour {
   }
 
   void OnTriggerEnter(Collider collision) {
-    if (collision.CompareTag("Goal")) {
-      Destroy(gameObject);
-      manager.Goal();
-    } else if (collision.CompareTag("Ground")) {
-      Destroy(gameObject);
+    if (collision.CompareTag("Goal") && !scored) {
+      scored = true;
+      Destroy(gameObject, 2f);
+      manager.Goal(hitRim);
+    }
+  }
+
+  void OnCollisionEnter(Collision other) {
+    if (other.gameObject.CompareTag("Ground") && !scored && !missed) {
+      missed = true;
+      Destroy(gameObject, 3f);
       manager.MoveToNewPosition();
+    }
+    if (other.gameObject.CompareTag("Rim")) {
+      hitRim = true;
     }
   }
 

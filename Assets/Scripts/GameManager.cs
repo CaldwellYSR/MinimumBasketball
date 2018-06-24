@@ -3,19 +3,26 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
-  public Camera main_camera;
   public GameObject basketballPrefab;
   public Transform goal_transform;
 
-  public Slider difficultySlider;
   public int difficultyModifier = 1;
 
+  private Camera main_camera;
+  private int score;
   private Vector3 offset = new Vector3(0, -0.75f, 0);
   private bool needNewBall = true;
   private float distance = 2f;
   private Vector3 newPosition;
   private float moveTime = 2.5f;
   private float startTime = 0f;
+
+  private Text scoreText;
+
+  void Awake() {
+    this.main_camera = Camera.main;
+    this.scoreText = GameObject.Find("Score Text").GetComponent<Text>();;
+  }
 
   void Start() {
     MoveToNewPosition();
@@ -33,11 +40,12 @@ public class GameManager : MonoBehaviour {
 
   }
 
-  public void SetDifficulty() {
-    difficultyModifier = (int) Mathf.Floor(difficultySlider.value);
-  }
+  public void Goal(bool hitRim) {
+    var points = (hitRim) ? 2 : 3;
 
-  public void Goal() {
+    this.score += points;
+
+    UpdateScoreText();
     MoveToNewPosition();
   }
 
@@ -62,6 +70,10 @@ public class GameManager : MonoBehaviour {
     Vector3 output = goal_transform.position + position * radius;
     output.y = 6f;
     return output;
+  }
+
+  private void UpdateScoreText() {
+    this.scoreText.text = "Score: " + this.score;
   }
 
 }
